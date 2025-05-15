@@ -47,6 +47,8 @@
             nudStoc = new NumericUpDown();
             nudPret = new NumericUpDown();
             nudCiocolata = new NumericUpDown();
+            button1 = new Button();
+            button2 = new Button();
             ((System.ComponentModel.ISupportInitialize)nudStoc).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPret).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudCiocolata).BeginInit();
@@ -192,7 +194,6 @@
             label11.Size = new Size(36, 17);
             label11.TabIndex = 18;
             label11.Text = "Stoc";
-            label11.Click += this.label11_Click;
             // 
             // nudStoc
             // 
@@ -215,11 +216,32 @@
             nudCiocolata.Size = new Size(214, 23);
             nudCiocolata.TabIndex = 21;
             // 
+            // button1
+            // 
+            button1.Location = new Point(45, 509);
+            button1.Name = "button1";
+            button1.Size = new Size(226, 29);
+            button1.TabIndex = 22;
+            button1.Text = "Adaugare";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(296, 509);
+            button2.Name = "button2";
+            button2.Size = new Size(226, 29);
+            button2.TabIndex = 23;
+            button2.Text = "Anulare";
+            button2.UseVisualStyleBackColor = true;
+            // 
             // CreateEditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(562, 527);
+            ClientSize = new Size(562, 567);
+            Controls.Add(button2);
+            Controls.Add(button1);
             Controls.Add(nudCiocolata);
             Controls.Add(nudPret);
             Controls.Add(nudStoc);
@@ -270,5 +292,7 @@
         private NumericUpDown nudStoc;
         private NumericUpDown nudPret;
         private NumericUpDown nudCiocolata;
+        private Button button1;
+        private Button button2;
     }
 }

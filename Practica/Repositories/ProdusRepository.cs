@@ -192,5 +192,28 @@ namespace Practica.Repositories
                 Console.WriteLine("Exception: " + ex.ToString());
             }
         }
+
+        public void DeleteProdusByCod(string cod)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = "DELETE FROM Produse WHERE Cod = @cod";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@cod", cod);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.ToString());
+                throw;
+            }
+        }
     }
 }
