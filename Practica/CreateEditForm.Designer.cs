@@ -118,6 +118,7 @@
             // cmbTip
             // 
             cmbTip.FormattingEnabled = true;
+            cmbTip.Items.AddRange(new object[] { "Caramela", "Ciocolata", "Bomboana", "Zefir", "Inghetata" });
             cmbTip.Location = new Point(177, 197);
             cmbTip.Name = "cmbTip";
             cmbTip.Size = new Size(214, 25);

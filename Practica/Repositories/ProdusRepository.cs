@@ -215,5 +215,165 @@ namespace Practica.Repositories
                 throw;
             }
         }
+
+        public Produs? GetCheapestCaramela()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = @"SELECT TOP 1 * 
+                         FROM Produse 
+                         WHERE Tip = @tip 
+                         ORDER BY Pret ASC";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@tip", "Caramela");
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new Produs
+                                {
+                                    id_produs = reader.GetInt32(0),
+                                    cod = reader.GetString(1),
+                                    nume = reader.GetString(2),
+                                    tip = reader.GetString(3),
+                                    pret = reader.GetDecimal(4),
+                                    continut_ciocolata = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    ingrediente = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                    pentru_diabetici = reader.GetBoolean(7),
+                                    stoc = reader.GetInt32(8),
+                                    volum_vanzari = reader.GetInt32(9)
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return null;
+        }
+
+        public List<Produs> GetBomboaneCuZahar()
+        {
+            var products = new List<Produs>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = @"SELECT 
+                        IDProdus AS id_produs,
+                        Cod AS cod,
+                        Nume AS nume,
+                        Tip AS tip,
+                        Pret AS pret,
+                        ContinutCiocolata AS continut_ciocolata,
+                        Ingrediente AS ingrediente,
+                        PentruDiabetici AS pentru_diabetici,
+                        Stoc AS stoc,
+                        VolumVanzari AS volum_vanzari
+                        FROM Produse 
+                        WHERE LOWER(Ingrediente) LIKE '%zahar%' 
+                           OR LOWER(Ingrediente) LIKE '%miere%'
+                           OR LOWER(Ingrediente) LIKE '%înlocuitor%'
+                           OR LOWER(Ingrediente) LIKE '%edulcorant%'
+                           OR LOWER(Ingrediente) LIKE '%zaharis%'
+                        ORDER BY Pret DESC";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                products.Add(new Produs
+                                {
+                                    id_produs = reader.GetInt32(0),
+                                    cod = reader.GetString(1),
+                                    nume = reader.GetString(2),
+                                    tip = reader.GetString(3),
+                                    pret = reader.GetDecimal(4),
+                                    continut_ciocolata = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    ingrediente = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                    pentru_diabetici = reader.GetBoolean(7),
+                                    stoc = reader.GetInt32(8),
+                                    volum_vanzari = reader.GetInt32(9)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}");
+            }
+            return products;
+        }
+
+        public List<Produs> GetProduseByCiocolata(int continutCiocolata)
+        {
+            var products = new List<Produs>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = @"SELECT 
+                        IDProdus AS id_produs,
+                        Cod AS cod,
+                        Nume AS nume,
+                        Tip AS tip,
+                        Pret AS pret,
+                        ContinutCiocolata AS continut_ciocolata,
+                        Ingrediente AS ingrediente,
+                        PentruDiabetici AS pentru_diabetici,
+                        Stoc AS stoc,
+                        VolumVanzari AS volum_vanzari
+                        FROM Produse 
+                        WHERE ContinutCiocolata = @continut";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@continut", continutCiocolata);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var prod = new Produs();
+                                prod.id_produs = reader.GetInt32(0);
+                                prod.cod = reader.GetString(1);
+                                prod.nume = reader.GetString(2);
+                                prod.tip = reader.GetString(3);
+                                prod.pret = reader.GetDecimal(4);
+                                prod.continut_ciocolata = reader.GetInt32(5);
+                                prod.ingrediente = reader.IsDBNull(6) ? "" : reader.GetString(6);
+                                prod.pentru_diabetici = reader.GetBoolean(7);
+                                prod.stoc = reader.GetInt32(8);
+                                prod.volum_vanzari = reader.GetInt32(9);
+
+                                products.Add(prod);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"DB Error: {ex.Message}");
+            }
+            return products;
+        }
     }
 }

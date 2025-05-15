@@ -35,6 +35,11 @@
             productsDataGrid = new DataGridView();
             txtDeleteCod = new TextBox();
             button4 = new Button();
+            button5 = new Button();
+            button6 = new Button();
+            button7 = new Button();
+            txtCiocolata = new TextBox();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)productsDataGrid).BeginInit();
             SuspendLayout();
             // 
@@ -111,11 +116,63 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // button5
+            // 
+            button5.Location = new Point(849, 151);
+            button5.Name = "button5";
+            button5.Size = new Size(225, 29);
+            button5.TabIndex = 8;
+            button5.Text = "Ieftina Caramela";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(849, 186);
+            button6.Name = "button6";
+            button6.Size = new Size(225, 29);
+            button6.TabIndex = 9;
+            button6.Text = "Bomboane Cu Zahar";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(849, 254);
+            button7.Name = "button7";
+            button7.Size = new Size(225, 29);
+            button7.TabIndex = 11;
+            button7.Text = "Continut Ciocolata";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
+            // txtCiocolata
+            // 
+            txtCiocolata.Location = new Point(949, 221);
+            txtCiocolata.Name = "txtCiocolata";
+            txtCiocolata.PlaceholderText = "%";
+            txtCiocolata.Size = new Size(125, 27);
+            txtCiocolata.TabIndex = 10;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(849, 224);
+            label2.Name = "label2";
+            label2.Size = new Size(88, 20);
+            label2.TabIndex = 12;
+            label2.Text = "% Ciocolata";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1086, 462);
+            Controls.Add(label2);
+            Controls.Add(button7);
+            Controls.Add(txtCiocolata);
+            Controls.Add(button6);
+            Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(txtDeleteCod);
             Controls.Add(productsDataGrid);
@@ -140,5 +197,10 @@
         private DataGridView productsDataGrid;
         private TextBox txtDeleteCod;
         private Button button4;
+        private Button button5;
+        private Button button6;
+        private Button button7;
+        private TextBox txtCiocolata;
+        private Label label2;
     }
 }
