@@ -95,3 +95,5 @@ VALUES
 ('PRJ-SUS', 'Prăjitură cu gutui', 'Prăjitură', 38.00, 0, 'Gutui, făină, miere', 1, 18, 22),
 ('BOM-PIER', 'Bomboane cu piersici', 'Bomboane', 18.50, 0, 'Zahăr, suc de piersică', 0, 75, 85),
 ('CIO-VAN', 'Ciocolată cu vanilie bourbon', 'Ciocolată', 30.00, 60, 'Cacao, vanilie bourbon, zahăr', 0, 25, 35);
+
+SELECT * FROM Produse WHERE ContinutCiocolata = 60;

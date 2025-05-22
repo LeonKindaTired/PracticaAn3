@@ -375,5 +375,156 @@ namespace Practica.Repositories
             }
             return products;
         }
+
+        public List<Produs> GetBomboaneZ()
+        {
+            var products = new List<Produs>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string sql = @"SELECT Ingrediente, Cod, Nume 
+                     FROM Produse 
+                     WHERE Cod LIKE @codPattern";
+
+                using (SqlCommand cmd = new SqlCommand(sql, connection))
+                {
+                    cmd.Parameters.AddWithValue("@codPattern", "Z%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            products.Add(new Produs
+                            {
+                                cod = reader.GetString(1),
+                                nume = reader.GetString(2),
+                                ingrediente = reader.IsDBNull(0) ? "" : reader.GetString(0)
+                            });
+                        }
+                    }
+                }
+            }
+            return products;
+        }
+
+        public decimal? GetMediaPreturilor()
+        {
+            decimal? media = null;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = "SELECT AVG(Pret) FROM Produse";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        object result = command.ExecuteScalar();
+                        if (result != DBNull.Value)
+                        {
+                            media = Convert.ToDecimal(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la calculul mediei: {ex.Message}");
+            }
+            return media;
+        }
+
+        public List<Produs> GetProdusePentruDiabetici()
+        {
+            List<Produs> products = new List<Produs>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = @"SELECT 
+                        IDProdus AS id_produs,
+                        Cod AS cod,
+                        Nume AS nume,
+                        Tip AS tip,
+                        Pret AS pret,
+                        ContinutCiocolata AS continut_ciocolata,
+                        Ingrediente AS ingrediente,
+                        PentruDiabetici AS pentru_diabetici,
+                        Stoc AS stoc,
+                        VolumVanzari AS volum_vanzari
+                        FROM Produse 
+                        WHERE PentruDiabetici = 1
+                        ORDER BY Nume ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                products.Add(new Produs
+                                {
+                                    id_produs = reader.GetInt32(0),
+                                    cod = reader.GetString(1),
+                                    nume = reader.GetString(2),
+                                    tip = reader.GetString(3),
+                                    pret = reader.GetDecimal(4),
+                                    continut_ciocolata = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                    ingrediente = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                    pentru_diabetici = reader.GetBoolean(7),
+                                    stoc = reader.GetInt32(8),
+                                    volum_vanzari = reader.GetInt32(9)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la încărcarea produselor: {ex.Message}");
+            }
+            return products;
+        }
+
+        public List<ProdusVanzari> GetCeleMaiVanduteProduse()
+        {
+            List<ProdusVanzari> lista = new List<ProdusVanzari>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string sql = @"SELECT 
+                        Nume AS Produs,
+                        VolumVanzari AS Vanzi,
+                        Stoc AS StocKg
+                        FROM Produse
+                        ORDER BY VolumVanzari DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, connection))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista.Add(new ProdusVanzari
+                            {
+                                Produs = reader["Produs"].ToString(),
+                                Vanzi = Convert.ToInt32(reader["Vanzi"]),
+                                StocKg = Convert.ToInt32(reader["StocKg"])
+                            });
+                    }
+                }
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la încărcarea datelor: {ex.Message}");
+            }
+            return lista;
+        }
     }
 }

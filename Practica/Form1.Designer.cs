@@ -40,6 +40,10 @@
             button7 = new Button();
             txtCiocolata = new TextBox();
             label2 = new Label();
+            button8 = new Button();
+            button9 = new Button();
+            button10 = new Button();
+            button11 = new Button();
             ((System.ComponentModel.ISupportInitialize)productsDataGrid).BeginInit();
             SuspendLayout();
             // 
@@ -49,7 +53,7 @@
             label1.Font = new Font("Arial", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(1062, 49);
+            label1.Size = new Size(1147, 49);
             label1.TabIndex = 0;
             label1.Text = "Cofetarius";
             label1.TextAlign = ContentAlignment.TopCenter;
@@ -67,7 +71,7 @@
             // button2
             // 
             button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.Location = new Point(541, 70);
+            button2.Location = new Point(626, 70);
             button2.Name = "button2";
             button2.Size = new Size(148, 29);
             button2.TabIndex = 2;
@@ -78,7 +82,7 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.Location = new Point(695, 70);
+            button3.Location = new Point(780, 70);
             button3.Name = "button3";
             button3.Size = new Size(125, 29);
             button3.TabIndex = 3;
@@ -95,12 +99,13 @@
             productsDataGrid.Name = "productsDataGrid";
             productsDataGrid.RowHeadersWidth = 51;
             productsDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            productsDataGrid.Size = new Size(808, 345);
+            productsDataGrid.Size = new Size(893, 345);
             productsDataGrid.TabIndex = 4;
             // 
             // txtDeleteCod
             // 
-            txtDeleteCod.Location = new Point(849, 107);
+            txtDeleteCod.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtDeleteCod.Location = new Point(934, 107);
             txtDeleteCod.Name = "txtDeleteCod";
             txtDeleteCod.PlaceholderText = "Cod de sters";
             txtDeleteCod.Size = new Size(125, 27);
@@ -108,7 +113,8 @@
             // 
             // button4
             // 
-            button4.Location = new Point(980, 105);
+            button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button4.Location = new Point(1065, 105);
             button4.Name = "button4";
             button4.Size = new Size(94, 29);
             button4.TabIndex = 7;
@@ -118,7 +124,8 @@
             // 
             // button5
             // 
-            button5.Location = new Point(849, 151);
+            button5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button5.Location = new Point(934, 151);
             button5.Name = "button5";
             button5.Size = new Size(225, 29);
             button5.TabIndex = 8;
@@ -128,7 +135,8 @@
             // 
             // button6
             // 
-            button6.Location = new Point(849, 186);
+            button6.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button6.Location = new Point(934, 186);
             button6.Name = "button6";
             button6.Size = new Size(225, 29);
             button6.TabIndex = 9;
@@ -138,7 +146,8 @@
             // 
             // button7
             // 
-            button7.Location = new Point(849, 254);
+            button7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button7.Location = new Point(934, 254);
             button7.Name = "button7";
             button7.Size = new Size(225, 29);
             button7.TabIndex = 11;
@@ -148,7 +157,8 @@
             // 
             // txtCiocolata
             // 
-            txtCiocolata.Location = new Point(949, 221);
+            txtCiocolata.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            txtCiocolata.Location = new Point(1034, 221);
             txtCiocolata.Name = "txtCiocolata";
             txtCiocolata.PlaceholderText = "%";
             txtCiocolata.Size = new Size(125, 27);
@@ -156,18 +166,67 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(849, 224);
+            label2.Location = new Point(934, 224);
             label2.Name = "label2";
             label2.Size = new Size(88, 20);
             label2.TabIndex = 12;
             label2.Text = "% Ciocolata";
             // 
+            // button8
+            // 
+            button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button8.Location = new Point(934, 289);
+            button8.Name = "button8";
+            button8.Size = new Size(225, 29);
+            button8.TabIndex = 13;
+            button8.Text = "Export";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
+            // button9
+            // 
+            button9.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button9.Location = new Point(934, 324);
+            button9.Name = "button9";
+            button9.Size = new Size(225, 29);
+            button9.TabIndex = 14;
+            button9.Text = "Media Preturilor";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
+            // button10
+            // 
+            button10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button10.Location = new Point(934, 359);
+            button10.Name = "button10";
+            button10.Size = new Size(225, 29);
+            button10.TabIndex = 15;
+            button10.Text = "Lista Pentru Diabetici";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
+            // 
+            // button11
+            // 
+            button11.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button11.Location = new Point(934, 394);
+            button11.Name = "button11";
+            button11.Size = new Size(225, 29);
+            button11.TabIndex = 16;
+            button11.Text = "Top Vanzari";
+            button11.UseVisualStyleBackColor = true;
+            button11.Click += button11_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1086, 462);
+            ClientSize = new Size(1171, 462);
+            Controls.Add(button11);
+            Controls.Add(button10);
+            Controls.Add(button9);
+            Controls.Add(button8);
             Controls.Add(label2);
             Controls.Add(button7);
             Controls.Add(txtCiocolata);
@@ -202,5 +261,9 @@
         private Button button7;
         private TextBox txtCiocolata;
         private Label label2;
+        private Button button8;
+        private Button button9;
+        private Button button10;
+        private Button button11;
     }
 }

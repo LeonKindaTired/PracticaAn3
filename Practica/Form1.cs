@@ -1,7 +1,11 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml;
+using Microsoft.Data.SqlClient;
+using OfficeOpenXml;
 using Practica.Model;
 using Practica.Repositories;
 using System.Data;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Practica
 {
@@ -141,6 +145,66 @@ namespace Practica
             }
         }
 
+        public void ExportToExcel(List<string> ingredients)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Ingrediente");
+
+                worksheet.Cells[1, 1].Value = "Listă Ingrediente Bomboane Z";
+                worksheet.Cells[1, 1].Style.Font.Bold = true;
+
+                int row = 3;
+                foreach (var ingredient in ingredients.Distinct().OrderBy(i => i))
+                {
+                    worksheet.Cells[row, 1].Value = ingredient;
+                    row++;
+                }
+
+                using (var saveDialog = new SaveFileDialog())
+                {
+                    saveDialog.Filter = "Excel Files|*.xlsx";
+                    if (saveDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        File.WriteAllBytes(saveDialog.FileName, package.GetAsByteArray());
+                    }
+                }
+            }
+        }
+
+        //public void ExportToWord(List<string> ingredients)
+        //{
+        //    using (var document = WordprocessingDocument.Create("temp.docx", WordprocessingDocumentType.Document))
+        //    {
+        //        MainDocumentPart mainPart = document.AddMainDocumentPart();
+        //        mainPart.Document = new Document();
+        //        Body body = mainPart.Document.AppendChild(new Body());
+
+        //        Paragraph titlePara = body.AppendChild(new Paragraph());
+        //        Run titleRun = titlePara.AppendChild(new Run());
+        //        titleRun.AppendChild(new Text("Listă Ingrediente Bomboane Z"));
+        //        titleRun.RunProperties = new RunProperties(new Bold());
+
+        //        foreach (var ingredient in ingredients.Distinct().OrderBy(i => i))
+        //        {
+        //            Paragraph para = body.AppendChild(new Paragraph());
+        //            Run run = para.AppendChild(new Run());
+        //            run.AppendChild(new Text($"• {ingredient}"));
+        //        }
+
+        //        using (var saveDialog = new SaveFileDialog())
+        //        {
+        //            saveDialog.Filter = "Word Documents|*.docx";
+        //            if (saveDialog.ShowDialog() == DialogResult.OK)
+        //            {
+        //                document.SaveAs(saveDialog.FileName);
+        //            }
+        //        }
+        //    }
+        //}
+
         private void button6_Click(object sender, EventArgs e)
         {
             try
@@ -159,7 +223,6 @@ namespace Practica
                         AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
                     };
 
-                    // Use DataTable for reliable binding
                     DataTable table = new DataTable();
                     table.Columns.Add("cod", typeof(string));
                     table.Columns.Add("nume", typeof(string));
@@ -265,7 +328,7 @@ namespace Practica
                     {
                         DataPropertyName = "Pret",
                         HeaderText = "Preț",
-                        Name = "Pret" 
+                        Name = "Pret"
                     };
                     dgv.Columns.Add(pretColumn);
 
@@ -298,6 +361,225 @@ namespace Practica
                 else
                 {
                     MessageBox.Show($"Nu există produse cu {x}% ciocolată!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare: {ex.Message}");
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var repo = new ProdusRepository();
+                var products = repo.GetBomboaneZ();
+
+                if (!products.Any())
+                {
+                    MessageBox.Show("Nu există bomboane Z în baza de date!");
+                    return;
+                }
+
+                var allIngredients = new List<string>();
+                foreach (var p in products)
+                {
+                    var ingredients = p.ingrediente.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    allIngredients.AddRange(ingredients.Select(i => i.Trim()));
+                }
+
+                using (var dialog = new SaveFileDialog())
+                {
+                    dialog.Filter = "Excel File|*.xlsx|Word Document|*.docx";
+                    dialog.Title = "Exportă ingrediente";
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        if (dialog.FileName.EndsWith(".xlsx"))
+                        {
+                            ExportToExcel(allIngredients);
+                        }
+
+                        MessageBox.Show("Export finalizat cu succes!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare la export: {ex.Message}");
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var repo = new ProdusRepository();
+                decimal? averagePrice = repo.GetMediaPreturilor();
+
+                if (averagePrice.HasValue)
+                {
+                    MessageBox.Show($"Media prețurilor tuturor produselor: {averagePrice.Value.ToString("C2")}",
+                                    "Medie Prețuri",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Nu există produse în baza de date!",
+                                    "Medie Prețuri",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var repo = new ProdusRepository();
+                var produseDiabetici = repo.GetProdusePentruDiabetici();
+
+                if (produseDiabetici.Any())
+                {
+                    Form resultForm = new Form();
+                    DataGridView dgv = new DataGridView
+                    {
+                        Dock = DockStyle.Fill,
+                        ReadOnly = true,
+                        AutoGenerateColumns = false
+                    };
+
+                    DataTable table = new DataTable();
+                    table.Columns.Add("Cod", typeof(string));
+                    table.Columns.Add("Nume", typeof(string));
+                    table.Columns.Add("Tip", typeof(string));
+                    table.Columns.Add("Pret", typeof(decimal));
+                    table.Columns.Add("Ingrediente", typeof(string));
+
+                    foreach (var p in produseDiabetici)
+                    {
+                        table.Rows.Add(p.cod, p.nume, p.tip, p.pret, p.ingrediente);
+                    }
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Cod",
+                        HeaderText = "Cod",
+                        Name = "Cod"
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Nume",
+                        HeaderText = "Denumire",
+                        Name = "Nume"
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Tip",
+                        HeaderText = "Categorie",
+                        Name = "Tip"
+                    });
+
+                    var pretColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Pret",
+                        HeaderText = "Preț",
+                        Name = "Pret"
+                    };
+                    dgv.Columns.Add(pretColumn);
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Ingrediente",
+                        HeaderText = "Ingrediente",
+                        Name = "Ingrediente"
+                    });
+
+                    dgv.DataSource = table;
+
+                    pretColumn.DefaultCellStyle.Format = "C2";
+                    pretColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    resultForm.Text = "Produse pentru diabetici";
+                    resultForm.Size = new Size(1200, 600);
+                    resultForm.Controls.Add(dgv);
+                    resultForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Nu există produse pentru diabetici în stoc!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare: {ex.Message}");
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var repo = new ProdusRepository();
+                var topProducts = repo.GetCeleMaiVanduteProduse();
+
+                if (topProducts.Any())
+                {
+                    Form resultForm = new Form();
+                    DataGridView dgv = new DataGridView
+                    {
+                        Dock = DockStyle.Fill,
+                        ReadOnly = true,
+                        AutoGenerateColumns = false
+                    };
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Produs",
+                        HeaderText = "Produs",
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Vanzi",
+                        HeaderText = "Vânzări",
+                        DefaultCellStyle = new DataGridViewCellStyle
+                        {
+                            Alignment = DataGridViewContentAlignment.MiddleRight
+                        }
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "StocKg",
+                        HeaderText = "Stoc (kg)",
+                        DefaultCellStyle = new DataGridViewCellStyle
+                        {
+                            Alignment = DataGridViewContentAlignment.MiddleRight,
+                            Format = "N0"  
+                        }
+                    });
+
+                    dgv.DataSource = topProducts;
+
+                    resultForm.Text = "Top produse vândute și stocuri";
+                    resultForm.Size = new Size(800, 600);
+                    resultForm.Controls.Add(dgv);
+                    resultForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Nu există date despre vânzări!");
                 }
             }
             catch (Exception ex)
