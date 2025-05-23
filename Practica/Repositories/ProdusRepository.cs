@@ -526,5 +526,121 @@ namespace Practica.Repositories
             }
             return lista;
         }
+
+        public void CreateAndPopulateZefirTable()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string createTableSql = @"
+                IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProduseZefirRoz')
+                BEGIN
+                    CREATE TABLE ProduseZefirRoz (
+                        IDProdus INT PRIMARY KEY,
+                        Cod VARCHAR(10) UNIQUE NOT NULL,
+                        Nume NVARCHAR(100) NOT NULL,
+                        Tip NVARCHAR(50) NOT NULL,
+                        Pret DECIMAL(10,2) CHECK (Pret > 0),
+                        ContinutCiocolata INT,
+                        Ingrediente NVARCHAR(MAX),
+                        PentruDiabetici BIT DEFAULT 0,
+                        Stoc INT CHECK (Stoc >= 0),
+                        VolumVanzari INT DEFAULT 0
+                    )
+                END";
+
+                    using (SqlCommand createCommand = new SqlCommand(createTableSql, connection))
+                    {
+                        createCommand.ExecuteNonQuery();
+                    }
+
+                    string copyDataSql = @"
+                INSERT INTO ProduseZefirRoz 
+                SELECT 
+                    IDProdus, Cod, Nume, Tip, Pret,
+                    ContinutCiocolata, Ingrediente,
+                    PentruDiabetici, Stoc, VolumVanzari
+                FROM Produse 
+                WHERE Nume = @NumeProdus
+                AND IDProdus NOT IN (SELECT IDProdus FROM ProduseZefirRoz)";
+
+                    using (SqlCommand copyCommand = new SqlCommand(copyDataSql, connection))
+                    {
+                        copyCommand.Parameters.AddWithValue("@NumeProdus", "Zefir de culoare roz");
+                        int rowsAffected = copyCommand.ExecuteNonQuery();
+                        MessageBox.Show($"Au fost copiate {rowsAffected} înregistrări.");
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    switch (ex.Number)
+                    {
+                        case 2714: 
+                            MessageBox.Show("Tabelul există deja. Datele au fost actualizate.");
+                            break;
+                        case 2627: 
+                            MessageBox.Show("Produsul există deja în tabelul nou.");
+                            break;
+                        default:
+                            MessageBox.Show($"Eroare SQL: {ex.Number} - {ex.Message}");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Eroare generală: {ex.Message}");
+                }
+            }
+        }
+
+        public List<Produs> GetProduseZefirRoz()
+        {
+            List<Produs> produse = new List<Produs>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = @"
+                    SELECT 
+                        IDProdus, 
+                        Cod, 
+                        Nume, 
+                        Tip, 
+                        Pret, 
+                        ContinutCiocolata, 
+                        Ingrediente, 
+                        PentruDiabetici, 
+                        Stoc, 
+                        VolumVanzari 
+                    FROM ProduseZefirRoz";
+
+                using (SqlCommand cmd = new SqlCommand(sql, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            produse.Add(new Produs
+                            {
+                                id_produs = reader.GetInt32(0),
+                                cod = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                                nume = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                                tip = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                pret = reader.GetDecimal(4),
+                                continut_ciocolata = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                ingrediente = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                pentru_diabetici = reader.GetBoolean(7),
+                                stoc = reader.GetInt32(8),
+                                volum_vanzari = reader.GetInt32(9)
+                            });
+                        }
+                    }
+                }
+            }
+            return produse;
+        }
     }
 }

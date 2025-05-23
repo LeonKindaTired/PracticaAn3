@@ -6,6 +6,7 @@ using Practica.Model;
 using Practica.Repositories;
 using System.Data;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.ComponentModel;
 
 namespace Practica
 {
@@ -147,8 +148,6 @@ namespace Practica
 
         public void ExportToExcel(List<string> ingredients)
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Ingrediente");
@@ -566,7 +565,7 @@ namespace Practica
                         DefaultCellStyle = new DataGridViewCellStyle
                         {
                             Alignment = DataGridViewContentAlignment.MiddleRight,
-                            Format = "N0"  
+                            Format = "N0"
                         }
                     });
 
@@ -585,6 +584,98 @@ namespace Practica
             catch (Exception ex)
             {
                 MessageBox.Show($"Eroare: {ex.Message}");
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            ProdusRepository repo = new ProdusRepository();
+            repo.CreateAndPopulateZefirTable();
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var repo = new ProdusRepository();
+                var produseZefir = repo.GetProduseZefirRoz();
+
+                if (produseZefir.Any())
+                {
+                    Form resultForm = new Form();
+                    DataGridView dgv = new DataGridView
+                    {
+                        Dock = DockStyle.Fill,
+                        ReadOnly = true,
+                        AutoGenerateColumns = false
+                    };
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Cod", 
+                        HeaderText = "Cod"
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Nume",
+                        HeaderText = "Nume"
+                    });
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Tip",
+                        HeaderText = "Tip"
+                    });
+
+                    var pretColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "pret",
+                        HeaderText = "Preț"
+                    };
+                    dgv.Columns.Add(pretColumn);
+
+                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "stoc",
+                        HeaderText = "Stoc"
+                    });
+
+                    pretColumn.DefaultCellStyle.Format = "C2";
+                    pretColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    dgv.DataSource = produseZefir;
+
+                    resultForm.Text = "Produse Zefir Roz";
+                    resultForm.Size = new Size(800, 600);
+                    resultForm.Controls.Add(dgv);
+                    resultForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Nu există produse în tabelul Zefir Roz!",
+                                    "Informație",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 208) 
+                {
+                    MessageBox.Show("Tabelul 'ProduseZefirRoz' nu există!\nCreați-l mai întâi.",
+                                    "Eroare",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Eroare SQL: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Eroare: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -44,6 +44,8 @@
             button9 = new Button();
             button10 = new Button();
             button11 = new Button();
+            button12 = new Button();
+            button13 = new Button();
             ((System.ComponentModel.ISupportInitialize)productsDataGrid).BeginInit();
             SuspendLayout();
             // 
@@ -99,7 +101,7 @@
             productsDataGrid.Name = "productsDataGrid";
             productsDataGrid.RowHeadersWidth = 51;
             productsDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            productsDataGrid.Size = new Size(893, 345);
+            productsDataGrid.Size = new Size(893, 387);
             productsDataGrid.TabIndex = 4;
             // 
             // txtDeleteCod
@@ -218,11 +220,35 @@
             button11.UseVisualStyleBackColor = true;
             button11.Click += button11_Click;
             // 
+            // button12
+            // 
+            button12.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button12.Location = new Point(934, 429);
+            button12.Name = "button12";
+            button12.Size = new Size(225, 29);
+            button12.TabIndex = 17;
+            button12.Text = "Zefir Culoare Roz";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click;
+            // 
+            // button13
+            // 
+            button13.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button13.Location = new Point(934, 464);
+            button13.Name = "button13";
+            button13.Size = new Size(225, 29);
+            button13.TabIndex = 18;
+            button13.Text = "Tabel ZCR";
+            button13.UseVisualStyleBackColor = true;
+            button13.Click += button13_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1171, 462);
+            ClientSize = new Size(1171, 504);
+            Controls.Add(button13);
+            Controls.Add(button12);
             Controls.Add(button11);
             Controls.Add(button10);
             Controls.Add(button9);
@@ -265,5 +291,7 @@
         private Button button9;
         private Button button10;
         private Button button11;
+        private Button button12;
+        private Button button13;
     }
 }
