@@ -89,9 +89,10 @@
             // 
             // btnLogin
             // 
+            btnLogin.FlatAppearance.BorderSize = 0;
             btnLogin.Location = new Point(137, 175);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(176, 29);
+            btnLogin.Size = new Size(176, 33);
             btnLogin.TabIndex = 5;
             btnLogin.Text = "Logare";
             btnLogin.UseVisualStyleBackColor = true;
@@ -101,16 +102,17 @@
             // 
             btnCancel.Location = new Point(319, 175);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(173, 29);
+            btnCancel.Size = new Size(173, 33);
             btnCancel.TabIndex = 6;
             btnCancel.Text = "Anulare";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click_1;
             // 
             // button1
             // 
-            button1.Location = new Point(137, 210);
+            button1.Location = new Point(137, 225);
             button1.Name = "button1";
-            button1.Size = new Size(355, 29);
+            button1.Size = new Size(355, 33);
             button1.TabIndex = 7;
             button1.Text = "Creare Utilizator";
             button1.UseVisualStyleBackColor = true;
@@ -120,7 +122,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(542, 275);
+            BackColor = Color.FromArgb(255, 245, 225);
+            ClientSize = new Size(542, 313);
             Controls.Add(button1);
             Controls.Add(btnCancel);
             Controls.Add(btnLogin);

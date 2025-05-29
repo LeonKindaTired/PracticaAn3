@@ -60,7 +60,7 @@
             label1.Font = new Font("Arial", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(12, 8);
             label1.Name = "label1";
-            label1.Size = new Size(538, 29);
+            label1.Size = new Size(538, 38);
             label1.TabIndex = 0;
             label1.Text = "Adaugare Produs";
             label1.TextAlign = ContentAlignment.TopCenter;
@@ -86,7 +86,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(45, 116);
+            label4.Location = new Point(45, 128);
             label4.Name = "label4";
             label4.Size = new Size(33, 17);
             label4.TabIndex = 3;
@@ -94,14 +94,14 @@
             // 
             // txtCod
             // 
-            txtCod.Location = new Point(177, 113);
+            txtCod.Location = new Point(278, 148);
             txtCod.Name = "txtCod";
             txtCod.Size = new Size(214, 23);
             txtCod.TabIndex = 4;
             // 
             // txtNume
             // 
-            txtNume.Location = new Point(177, 154);
+            txtNume.Location = new Point(278, 196);
             txtNume.Name = "txtNume";
             txtNume.Size = new Size(214, 23);
             txtNume.TabIndex = 6;
@@ -109,7 +109,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(45, 157);
+            label5.Location = new Point(45, 176);
             label5.Name = "label5";
             label5.Size = new Size(45, 17);
             label5.TabIndex = 5;
@@ -119,7 +119,7 @@
             // 
             cmbTip.FormattingEnabled = true;
             cmbTip.Items.AddRange(new object[] { "Caramela", "Ciocolata", "Bomboana", "Zefir", "Inghetata" });
-            cmbTip.Location = new Point(177, 197);
+            cmbTip.Location = new Point(278, 248);
             cmbTip.Name = "cmbTip";
             cmbTip.Size = new Size(214, 25);
             cmbTip.TabIndex = 7;
@@ -127,7 +127,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(45, 200);
+            label6.Location = new Point(45, 228);
             label6.Name = "label6";
             label6.Size = new Size(28, 17);
             label6.TabIndex = 8;
@@ -136,7 +136,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(45, 246);
+            label7.Location = new Point(45, 295);
             label7.Name = "label7";
             label7.Size = new Size(34, 17);
             label7.TabIndex = 9;
@@ -145,7 +145,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(45, 289);
+            label8.Location = new Point(45, 356);
             label8.Name = "label8";
             label8.Size = new Size(122, 17);
             label8.TabIndex = 11;
@@ -154,7 +154,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(45, 329);
+            label9.Location = new Point(45, 440);
             label9.Name = "label9";
             label9.Size = new Size(79, 17);
             label9.TabIndex = 13;
@@ -162,7 +162,7 @@
             // 
             // txtIngrediente
             // 
-            txtIngrediente.Location = new Point(177, 326);
+            txtIngrediente.Location = new Point(278, 460);
             txtIngrediente.Multiline = true;
             txtIngrediente.Name = "txtIngrediente";
             txtIngrediente.Size = new Size(214, 53);
@@ -171,7 +171,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(45, 411);
+            label10.Location = new Point(45, 522);
             label10.Name = "label10";
             label10.Size = new Size(108, 17);
             label10.TabIndex = 15;
@@ -180,7 +180,7 @@
             // chkDiabetici
             // 
             chkDiabetici.AutoSize = true;
-            chkDiabetici.Location = new Point(177, 411);
+            chkDiabetici.Location = new Point(278, 521);
             chkDiabetici.Name = "chkDiabetici";
             chkDiabetici.Size = new Size(48, 21);
             chkDiabetici.TabIndex = 16;
@@ -190,7 +190,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(45, 451);
+            label11.Location = new Point(45, 595);
             label11.Name = "label11";
             label11.Size = new Size(36, 17);
             label11.TabIndex = 18;
@@ -198,28 +198,28 @@
             // 
             // nudStoc
             // 
-            nudStoc.Location = new Point(177, 449);
+            nudStoc.Location = new Point(278, 612);
             nudStoc.Name = "nudStoc";
             nudStoc.Size = new Size(214, 23);
             nudStoc.TabIndex = 19;
             // 
             // nudPret
             // 
-            nudPret.Location = new Point(177, 244);
+            nudPret.Location = new Point(278, 316);
             nudPret.Name = "nudPret";
             nudPret.Size = new Size(214, 23);
             nudPret.TabIndex = 20;
             // 
             // nudCiocolata
             // 
-            nudCiocolata.Location = new Point(177, 287);
+            nudCiocolata.Location = new Point(278, 377);
             nudCiocolata.Name = "nudCiocolata";
             nudCiocolata.Size = new Size(214, 23);
             nudCiocolata.TabIndex = 21;
             // 
             // button1
             // 
-            button1.Location = new Point(45, 509);
+            button1.Location = new Point(42, 667);
             button1.Name = "button1";
             button1.Size = new Size(226, 29);
             button1.TabIndex = 22;
@@ -229,18 +229,19 @@
             // 
             // button2
             // 
-            button2.Location = new Point(296, 509);
+            button2.Location = new Point(293, 667);
             button2.Name = "button2";
             button2.Size = new Size(226, 29);
             button2.TabIndex = 23;
             button2.Text = "Anulare";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // CreateEditForm
             // 
             AutoScaleDimensions = new SizeF(8F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(562, 567);
+            ClientSize = new Size(562, 718);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(nudCiocolata);

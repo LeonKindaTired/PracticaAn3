@@ -5,6 +5,9 @@ using OfficeOpenXml;
 using Practica.Model;
 using Practica.Repositories;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.ComponentModel;
 
@@ -15,12 +18,70 @@ namespace Practica
         public Form1()
         {
             InitializeComponent();
+            StyleForm();
             ReadProducts();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void StyleForm()
+        {
+            this.BackColor = System.Drawing.Color.FromArgb(255, 245, 225);
+            this.Font = new System.Drawing.Font("Segoe UI", 9f, FontStyle.Regular);
+
+            System.Drawing.Color addColor = System.Drawing.Color.FromArgb(247, 200, 215);
+            System.Drawing.Color deleteColor = System.Drawing.Color.FromArgb(230, 150, 150);
+            System.Drawing.Color queryColor = System.Drawing.Color.FromArgb(180, 210, 230);
+            System.Drawing.Color exportColor = System.Drawing.Color.FromArgb(180, 220, 180);
+            System.Drawing.Color specialColor = System.Drawing.Color.FromArgb(220, 190, 230);
+            System.Drawing.Color neutralColor = System.Drawing.Color.FromArgb(240, 220, 200);
+
+            foreach (System.Windows.Forms.Control c in this.Controls)
+            {
+                if (c is Button btn)
+                {
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.Font = new System.Drawing.Font("Segoe UI", 9f, FontStyle.Bold);
+                    btn.ForeColor = System.Drawing.Color.FromArgb(70, 70, 70);
+                    btn.Padding = new Padding(3);
+                    btn.Cursor = Cursors.Hand;
+
+                    if (btn == button1) btn.BackColor = addColor;
+                    else if (btn == button4) btn.BackColor = deleteColor;
+                    else if (btn == button8) btn.BackColor = exportColor;
+                    else if (btn == button12 || btn == button13)
+                        btn.BackColor = specialColor;
+                    else btn.BackColor = queryColor;
+
+                    btn.MouseEnter += (sender, e) =>
+                    {
+                        Button b = (Button)sender;
+                        b.FlatAppearance.MouseOverBackColor = ControlPaint.Light(b.BackColor, 0.1f);
+                    };
+
+                    btn.MouseLeave += (sender, e) =>
+                    {
+                        Button b = (Button)sender;
+                        b.FlatAppearance.MouseOverBackColor = b.BackColor;
+                    };
+                }
+            }
+
+            productsDataGrid.BackgroundColor = System.Drawing.Color.White;
+            productsDataGrid.BorderStyle = BorderStyle.None;
+            productsDataGrid.EnableHeadersVisualStyles = false;
+            productsDataGrid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(230, 230, 230);
+            productsDataGrid.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9f, FontStyle.Bold);
+            productsDataGrid.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
+
+            txtDeleteCod.BackColor = System.Drawing.Color.White;
+            txtCiocolata.BackColor = System.Drawing.Color.White;
+            txtDeleteCod.BorderStyle = BorderStyle.FixedSingle;
+            txtCiocolata.BorderStyle = BorderStyle.FixedSingle;
         }
 
         private void ReadProducts()
@@ -172,38 +233,6 @@ namespace Practica
                 }
             }
         }
-
-        //public void ExportToWord(List<string> ingredients)
-        //{
-        //    using (var document = WordprocessingDocument.Create("temp.docx", WordprocessingDocumentType.Document))
-        //    {
-        //        MainDocumentPart mainPart = document.AddMainDocumentPart();
-        //        mainPart.Document = new Document();
-        //        Body body = mainPart.Document.AppendChild(new Body());
-
-        //        Paragraph titlePara = body.AppendChild(new Paragraph());
-        //        Run titleRun = titlePara.AppendChild(new Run());
-        //        titleRun.AppendChild(new Text("Listă Ingrediente Bomboane Z"));
-        //        titleRun.RunProperties = new RunProperties(new Bold());
-
-        //        foreach (var ingredient in ingredients.Distinct().OrderBy(i => i))
-        //        {
-        //            Paragraph para = body.AppendChild(new Paragraph());
-        //            Run run = para.AppendChild(new Run());
-        //            run.AppendChild(new Text($"• {ingredient}"));
-        //        }
-
-        //        using (var saveDialog = new SaveFileDialog())
-        //        {
-        //            saveDialog.Filter = "Word Documents|*.docx";
-        //            if (saveDialog.ShowDialog() == DialogResult.OK)
-        //            {
-        //                document.SaveAs(saveDialog.FileName);
-        //            }
-        //        }
-        //    }
-        //}
-
         private void button6_Click(object sender, EventArgs e)
         {
             try

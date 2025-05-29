@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +18,11 @@ namespace Practica
         private readonly AuthService _authService;
         private readonly string _connectionString;
 
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+            private static extern IntPtr CreateRoundRectRgn(
+            int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
+            int nWidthEllipse, int nHeightEllipse
+        );
         public CreareUtilizator(string connectionString)
         {
             InitializeComponent();
@@ -29,21 +35,33 @@ namespace Practica
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            CreateUI();
+            CreateStyledUI();
         }
 
-        private void CreateUI()
+        private void CreateStyledUI()
         {
-            Label lblUsername = new Label { Text = "Username:", Location = new Point(20, 20), AutoSize = true };
-            Label lblPassword = new Label { Text = "Password:", Location = new Point(20, 60), AutoSize = true };
-            Label lblConfirm = new Label { Text = "Confirm Password:", Location = new Point(20, 100), AutoSize = true };
+            this.ClientSize = new Size(400, 250);
+            this.BackColor = Color.FromArgb(255, 245, 225);
+            this.Font = new Font("Arial", 10f);
 
-            TextBox txtUsername = new TextBox { Location = new Point(150, 20), Size = new Size(200, 20) };
-            TextBox txtPassword = new TextBox { Location = new Point(150, 60), Size = new Size(200, 20), UseSystemPasswordChar = true };
-            TextBox txtConfirm = new TextBox { Location = new Point(150, 100), Size = new Size(200, 20), UseSystemPasswordChar = true };
+            int padding = 30;
+            int yStart = 20;
+            int controlHeight = 40;
+            int buttonHeight = 42;
 
-            Button btnCreate = new Button { Text = "Create User", Location = new Point(150, 140), Size = new Size(100, 30) };
-            Button btnCancel = new Button { Text = "Cancel", Location = new Point(260, 140), Size = new Size(100, 30) };
+            Label lblUsername = CreateLabel("Username:", 20, yStart);
+            Label lblPassword = CreateLabel("Password:", 20, yStart + controlHeight + 15);
+            Label lblConfirm = CreateLabel("Confirm Password:", 20, yStart + 2 * (controlHeight + 15));
+
+            TextBox txtUsername = CreateTextBox(yStart);
+            TextBox txtPassword = CreatePasswordBox(yStart + controlHeight + 15);
+            TextBox txtConfirm = CreatePasswordBox(yStart + 2 * (controlHeight + 15));
+
+            Button btnCreate = CreateButton("Create User", 100, yStart + 3 * (controlHeight + 15),
+                Color.FromArgb(247, 200, 215), Color.FromArgb(255, 220, 230));
+
+            Button btnCancel = CreateButton("Cancel", 230, yStart + 3 * (controlHeight + 15),
+                Color.FromArgb(220, 220, 220), Color.FromArgb(240, 240, 240));
 
             btnCreate.Click += (sender, e) =>
             {
@@ -109,6 +127,69 @@ namespace Practica
             lblConfirm, txtConfirm,
             btnCreate, btnCancel
         });
+        }
+
+        private Label CreateLabel(string text, int x, int y)
+        {
+            return new Label
+            {
+                Text = text,
+                Location = new Point(x, y + 10),
+                AutoSize = true,
+                Font = new Font("Arial", 12f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(100, 100, 100)
+            };
+        }
+
+        private TextBox CreateTextBox(int y)
+        {
+            var txt = new TextBox
+            {
+                Location = new Point(180, y),
+                Size = new Size(200, 36),
+                Font = new Font("Arial", 16f),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.None
+            };
+
+            ApplyRoundedStyle(txt, 10);
+            txt.Padding = new Padding(10, 8, 10, 8);
+            return txt;
+        }
+
+        private TextBox CreatePasswordBox(int y)
+        {
+            var txt = CreateTextBox(y);
+            txt.UseSystemPasswordChar = true;
+            txt.PasswordChar = '•';
+            return txt;
+        }
+
+        private Button CreateButton(string text, int x, int y, Color bgColor, Color hoverColor)
+        {
+            var btn = new Button
+            {
+                Text = text,
+                Location = new Point(x, y),
+                Size = new Size(120, 42),
+                Font = new Font("Arial", 12f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(80, 80, 80),
+                BackColor = bgColor,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+
+            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.MouseOverBackColor = hoverColor;
+            ApplyRoundedStyle(btn, 15);
+            return btn;
+        }
+
+        private void ApplyRoundedStyle(Control control, int radius)
+        {
+            control.Region = Region.FromHrgn(CreateRoundRectRgn(
+                0, 0, control.Width, control.Height, radius, radius
+            ));
         }
     }
 }
