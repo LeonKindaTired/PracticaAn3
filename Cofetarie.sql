@@ -17,8 +17,6 @@ CREATE TABLE Users (
     PasswordHash NVARCHAR(128) NOT NULL, 
 );
 
-DROP TABLE Users;
-
 INSERT INTO Produse (Cod, Nume, Tip, Pret, ContinutCiocolata, Ingrediente, PentruDiabetici, Stoc, VolumVanzari)
 VALUES
 ('BOM-VAN', 'Bomboane cu vanilie', 'Bomboane', 12.50, 0, 'Zahăr, sirop de glucoză, aromă vanilie', 0, 150, 200),

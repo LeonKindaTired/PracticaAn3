@@ -29,7 +29,7 @@ namespace Practica
             _connectionString = connectionString;
             _authService = new AuthService(connectionString);
 
-            this.Text = "Create New Admin User";
+            this.Text = "Creare Nou Utilizator";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -57,7 +57,7 @@ namespace Practica
             TextBox txtPassword = CreatePasswordBox(yStart + controlHeight + 15);
             TextBox txtConfirm = CreatePasswordBox(yStart + 2 * (controlHeight + 15));
 
-            Button btnCreate = CreateButton("Create User", 100, yStart + 3 * (controlHeight + 15),
+            Button btnCreate = CreateButton("Creare", 100, yStart + 3 * (controlHeight + 15),
                 Color.FromArgb(247, 200, 215), Color.FromArgb(255, 220, 230));
 
             Button btnCancel = CreateButton("Cancel", 230, yStart + 3 * (controlHeight + 15),
@@ -67,19 +67,19 @@ namespace Practica
             {
                 if (txtPassword.Text != txtConfirm.Text)
                 {
-                    MessageBox.Show("Passwords do not match!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Parolele nu coincid!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(txtUsername.Text))
                 {
-                    MessageBox.Show("Username cannot be empty!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Username-ul nu poate fi gol!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (txtPassword.Text.Length < 6)
                 {
-                    MessageBox.Show("Password must be at least 6 characters!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Parola trebuie să aibă cel puțin 6 caractere!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -98,7 +98,7 @@ namespace Practica
                             cmd.Parameters.AddWithValue("@passwordHash", passwordHash);
 
                             cmd.ExecuteNonQuery();
-                            MessageBox.Show("User created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Utilizator creat cu succes!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             this.DialogResult = DialogResult.OK;
                             this.Close();
                         }
@@ -106,7 +106,7 @@ namespace Practica
                 }
                 catch (SqlException ex) when (ex.Number == 2627)
                 {
-                    MessageBox.Show("Username already exists! Please choose a different username.", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Numele de utilizator există deja! Vă rugăm să alegeți un alt nume de utilizator.", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtUsername.Focus();
                 }
                 catch (Exception ex)

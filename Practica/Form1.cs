@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.ComponentModel;
+using System.Text;
 
 namespace Practica
 {
@@ -636,47 +637,48 @@ namespace Practica
                     {
                         Dock = DockStyle.Fill,
                         ReadOnly = true,
-                        AutoGenerateColumns = false
+                        AutoGenerateColumns = true,
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
                     };
 
-                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    DataTable table = new DataTable();
+                    table.Columns.Add("id_produs", typeof(int));
+                    table.Columns.Add("cod", typeof(string));
+                    table.Columns.Add("nume", typeof(string));
+                    table.Columns.Add("tip", typeof(string));
+                    table.Columns.Add("pret", typeof(decimal));
+                    table.Columns.Add("continut_ciocolata", typeof(int));
+                    table.Columns.Add("ingrediente", typeof(string));
+                    table.Columns.Add("pentru_diabetici", typeof(bool));
+                    table.Columns.Add("stoc", typeof(int));
+                    table.Columns.Add("volum_vanzari", typeof(int));
+
+                    foreach (var p in produseZefir)
                     {
-                        DataPropertyName = "Cod", 
-                        HeaderText = "Cod"
-                    });
+                        table.Rows.Add(
+                            p.id_produs,
+                            p.cod,
+                            p.nume,
+                            p.tip,
+                            p.pret,
+                            p.continut_ciocolata,
+                            p.ingrediente,
+                            p.pentru_diabetici,
+                            p.stoc,
+                            p.volum_vanzari
+                        );
+                    }
 
-                    dgv.Columns.Add(new DataGridViewTextBoxColumn
+                    dgv.DataSource = table;
+
+                    if (dgv.Columns.Contains("pret"))
                     {
-                        DataPropertyName = "Nume",
-                        HeaderText = "Nume"
-                    });
-
-                    dgv.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        DataPropertyName = "Tip",
-                        HeaderText = "Tip"
-                    });
-
-                    var pretColumn = new DataGridViewTextBoxColumn
-                    {
-                        DataPropertyName = "pret",
-                        HeaderText = "Preț"
-                    };
-                    dgv.Columns.Add(pretColumn);
-
-                    dgv.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        DataPropertyName = "stoc",
-                        HeaderText = "Stoc"
-                    });
-
-                    pretColumn.DefaultCellStyle.Format = "C2";
-                    pretColumn.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                    dgv.DataSource = produseZefir;
+                        dgv.Columns["pret"].DefaultCellStyle.Format = "C2";
+                        dgv.Columns["pret"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    }
 
                     resultForm.Text = "Produse Zefir Roz";
-                    resultForm.Size = new Size(800, 600);
+                    resultForm.Size = new Size(1000, 600);
                     resultForm.Controls.Add(dgv);
                     resultForm.ShowDialog();
                 }
@@ -690,7 +692,7 @@ namespace Practica
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 208) 
+                if (ex.Number == 208)
                 {
                     MessageBox.Show("Tabelul 'ProduseZefirRoz' nu există!\nCreați-l mai întâi.",
                                     "Eroare",
